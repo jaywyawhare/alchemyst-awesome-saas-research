@@ -1,107 +1,137 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { 
   Sparkles, 
-  Brain, 
   Command, 
   Settings, 
   Bell,
-  Search,
-  Zap
+  Menu,
+  Home,
+  FileText,
+  BookOpen,
+  Users,
+  Database,
+  Lightbulb
 } from "lucide-react";
 
 interface HeaderProps {
   onCommandPalette: () => void;
+  onTabChange?: (tab: string) => void;
+  activeTab?: string;
 }
 
-export default function Header({ onCommandPalette }: HeaderProps) {
-  const [isOnline, setIsOnline] = useState(true);
+const tabs = [
+  { id: "overview", name: "Overview", icon: Home },
+  { id: "citation", name: "Citations", icon: FileText },
+  { id: "literature", name: "Literature", icon: BookOpen },
+  { id: "collaboration", name: "Collaborate", icon: Users },
+  { id: "data", name: "Data", icon: Database },
+  { id: "proposal", name: "Proposals", icon: Lightbulb },
+];
+
+export default function Header({ onCommandPalette, onTabChange, activeTab = "overview" }: HeaderProps) {
   const [notifications, setNotifications] = useState(0);
 
-  useEffect(() => {
-    // Simulate connection status
-    const interval = setInterval(() => {
-      setIsOnline(Math.random() > 0.1);
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  const handleNotifications = () => {
+    console.log("Opening notifications panel");
+    setNotifications(0);
+  };
+
+  const handleSettings = () => {
+    console.log("Opening settings");
+    if (onTabChange) {
+      onTabChange("settings");
+    }
+  };
+
+  const handleLogoClick = () => {
+    console.log("Navigating to overview");
+    if (onTabChange) {
+      onTabChange("overview");
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 glass-strong border-b border-white/10">
-      <div className="container mx-auto px-6 py-3">
-        <div className="flex items-center justify-between">
-          {/* Logo & Brand */}
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg hover-lift">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold gradient-text">Research Suite</h1>
-              <p className="text-xs text-white/60">AI Research Assistant</p>
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-14 items-center px-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <div 
+            className="flex items-center space-x-2 cursor-pointer" 
+            onClick={handleLogoClick}
+          >
+            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
+              <Sparkles className="h-3.5 w-3.5 text-white" />
             </div>
           </div>
-
-          {/* Center - Status & Search */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className={`w-2 h-2 rounded-full ${
-                isOnline ? 'status-online' : 'status-error'
-              }`} />
-              <span className="text-xs text-white/70">
-                {isOnline ? 'Connected' : 'Offline'}
-              </span>
-            </div>
-            
+        </div>
+        
+        {/* Navigation Tabs - Centered */}
+        <nav className="flex items-center mx-auto space-x-1">
+          {tabs.map((tab) => (
             <Button
-              variant="ghost"
+              key={tab.id}
+              variant={activeTab === tab.id ? "default" : "ghost"}
               size="sm"
-              className="text-white/70 hover:text-white hover:bg-white/10"
-              onClick={() => {/* Search functionality */}}
+              className={`h-8 px-3 text-sm font-medium transition-colors ${
+                activeTab === tab.id 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+              onClick={() => onTabChange?.(tab.id)}
             >
-              <Search className="h-4 w-4" />
+              <tab.icon className="h-4 w-4 mr-2" />
+              {tab.name}
             </Button>
-          </div>
+          ))}
+        </nav>
 
-          {/* Right - Actions */}
-          <div className="flex items-center space-x-2">
-            <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
-              <Brain className="h-3 w-3 mr-1" />
-              AI Powered
-            </Badge>
-            
+        {/* Right Actions */}
+        <div className="flex items-center space-x-2">
+          {/* Mobile menu */}
+          <Button
+            variant="ghost"
+            className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle Menu</span>
+          </Button>
+
+          {/* Desktop actions */}
+          <div className="hidden md:flex items-center space-x-1">
             <Button
               variant="ghost"
               size="sm"
-              className="text-white/70 hover:text-white hover:bg-white/10 relative"
-              onClick={() => {/* Notifications */}}
+              className="relative h-9 w-9 p-0"
+              onClick={handleNotifications}
             >
               <Bell className="h-4 w-4" />
               {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center">
-                  {notifications}
-                </span>
+                <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500" />
               )}
+              <span className="sr-only">Notifications</span>
             </Button>
-
             <Button
               variant="ghost"
               size="sm"
-              className="text-white/70 hover:text-white hover:bg-white/10"
+              className="h-9 w-9 p-0"
               onClick={onCommandPalette}
             >
               <Command className="h-4 w-4" />
-              <span className="ml-2 text-xs opacity-60">⌘K</span>
+              <span className="sr-only">Search</span>
             </Button>
-
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
-              className="text-white/70 hover:text-white hover:bg-white/10"
+              className="h-9 w-9 p-0"
+              onClick={handleSettings}
             >
               <Settings className="h-4 w-4" />
+              <span className="sr-only">Settings</span>
             </Button>
           </div>
         </div>

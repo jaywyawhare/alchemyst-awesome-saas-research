@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
-import Sidebar from "@/components/layout/Sidebar";
 import CommandPalette from "@/components/ui/CommandPalette";
 import OverviewPanel from "@/components/agents/OverviewPanel";
 import CitationPanel from "@/components/agents/CitationPanel";
+import SettingsPanel from "@/components/agents/SettingsPanel";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -47,6 +47,10 @@ export default function Home() {
             e.preventDefault();
             setActiveTab("proposal");
             break;
+          case "7":
+            e.preventDefault();
+            setActiveTab("settings");
+            break;
         }
       }
 
@@ -82,32 +86,34 @@ export default function Home() {
         return <OverviewPanel />;
       case "citation":
         return <CitationPanel />;
+      case "settings":
+        return <SettingsPanel />;
       case "literature":
         return (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-bold gradient-text mb-4">Literature Review</h2>
-            <p className="text-white/60">Coming soon...</p>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">Literature Review</h2>
+            <p className="text-muted-foreground">Coming soon...</p>
           </div>
         );
       case "collaboration":
         return (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-bold gradient-text mb-4">Collaboration Hub</h2>
-            <p className="text-white/60">Coming soon...</p>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">Collaboration Hub</h2>
+            <p className="text-muted-foreground">Coming soon...</p>
           </div>
         );
       case "data":
         return (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-bold gradient-text mb-4">Data Extraction</h2>
-            <p className="text-white/60">Coming soon...</p>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">Data Extraction</h2>
+            <p className="text-muted-foreground">Coming soon...</p>
           </div>
         );
       case "proposal":
         return (
           <div className="text-center py-12">
-            <h2 className="text-2xl font-bold gradient-text mb-4">Research Proposals</h2>
-            <p className="text-white/60">Coming soon...</p>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">Research Proposals</h2>
+            <p className="text-muted-foreground">Coming soon...</p>
           </div>
         );
       default:
@@ -116,13 +122,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
-      <Header onCommandPalette={handleCommandPalette} />
-      <Sidebar activeTab={activeTab} onTabChange={handleTabChange} />
+    <div className="min-h-screen bg-background text-foreground">
+      <Header 
+        onCommandPalette={handleCommandPalette} 
+        onTabChange={handleTabChange}
+        activeTab={activeTab}
+      />
       
-      <main className="ml-64 pt-16 p-6">
-        <div className="max-w-7xl mx-auto">
-          {renderActivePanel()}
+      <main className="flex-1">
+        <div className="container max-w-screen-2xl mx-auto px-4 py-6">
+          <div className="animate-fade-in">
+            {renderActivePanel()}
+          </div>
         </div>
       </main>
 

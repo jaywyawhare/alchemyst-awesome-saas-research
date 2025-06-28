@@ -69,10 +69,10 @@ export default function CitationPanel() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold gradient-text">Citation Generator</h1>
-          <p className="text-white/60">Generate citations in multiple formats</p>
+          <h1 className="text-3xl font-semibold text-foreground">Citation Generator</h1>
+          <p className="text-muted-foreground">Generate citations in multiple formats</p>
         </div>
-        <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
+        <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
           <FileText className="h-3 w-3 mr-1" />
           AI Powered
         </Badge>
@@ -80,23 +80,23 @@ export default function CitationPanel() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Input Form */}
-        <Card className="glass">
+        <Card className="card-modern">
           <CardHeader>
-            <CardTitle className="text-white flex items-center space-x-2">
+            <CardTitle className="text-foreground flex items-center space-x-2">
               <BookOpen className="h-5 w-5" />
               <span>Paper Information</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">Citation Format</label>
+              <label className="text-sm font-medium text-foreground">Citation Format</label>
               <Select value={format} onValueChange={setFormat}>
-                <SelectTrigger className="glass focus-ring">
+                <SelectTrigger className="focus-ring">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="glass-strong">
+                <SelectContent>
                   {citationFormats.map((fmt) => (
-                    <SelectItem key={fmt.value} value={fmt.value} className="text-white">
+                    <SelectItem key={fmt.value} value={fmt.value}>
                       {fmt.label}
                     </SelectItem>
                   ))}
@@ -105,48 +105,48 @@ export default function CitationPanel() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">Title</label>
+              <label className="text-sm font-medium text-foreground">Title</label>
               <Input
                 placeholder="Paper title..."
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="glass focus-ring"
+                className="focus-ring"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">Authors</label>
+              <label className="text-sm font-medium text-foreground">Authors</label>
               <Input
                 placeholder="Author names (comma separated)..."
                 value={authors}
                 onChange={(e) => setAuthors(e.target.value)}
-                className="glass focus-ring"
+                className="focus-ring"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/80">Year</label>
+                <label className="text-sm font-medium text-foreground">Year</label>
                 <Input
                   placeholder="2024"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  className="glass focus-ring"
+                  className="focus-ring"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-white/80">Journal</label>
+                <label className="text-sm font-medium text-foreground">Journal</label>
                 <Input
                   placeholder="Journal name..."
                   value={journal}
                   onChange={(e) => setJournal(e.target.value)}
-                  className="glass focus-ring"
+                  className="focus-ring"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">DOI or URL</label>
+              <label className="text-sm font-medium text-foreground">DOI or URL</label>
               <Input
                 placeholder="10.1000/xyz123 or https://..."
                 value={doi || url}
@@ -160,14 +160,14 @@ export default function CitationPanel() {
                     setDoi('');
                   }
                 }}
-                className="glass focus-ring"
+                className="focus-ring"
               />
             </div>
 
             <Button
               onClick={handleGenerate}
               disabled={isLoading || !title.trim()}
-              className="w-full btn-cyber"
+              className="w-full btn-modern"
             >
               {isLoading ? (
                 <>
@@ -185,16 +185,16 @@ export default function CitationPanel() {
         </Card>
 
         {/* Results */}
-        <Card className="glass">
+        <Card className="card-modern">
           <CardHeader>
-            <CardTitle className="text-white flex items-center space-x-2">
+            <CardTitle className="text-foreground flex items-center space-x-2">
               <CheckCircle className="h-5 w-5" />
               <span>Generated Citations</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             {citations.length === 0 ? (
-              <div className="text-center py-8 text-white/50">
+              <div className="text-center py-8 text-muted-foreground">
                 <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
                 <p>No citations generated yet</p>
                 <p className="text-sm">Fill in the form and click generate</p>
@@ -202,9 +202,9 @@ export default function CitationPanel() {
             ) : (
               <div className="space-y-4">
                 {citations.map((citation, index) => (
-                  <div key={index} className="p-4 glass rounded-lg">
+                  <div key={index} className="p-4 bg-muted rounded-lg">
                     <div className="flex items-start justify-between mb-3">
-                      <Badge variant="secondary" className="bg-white/10 text-white/70 border-white/20">
+                      <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
                         {format.toUpperCase()}
                       </Badge>
                       <div className="flex space-x-2">
@@ -212,7 +212,7 @@ export default function CitationPanel() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleCopy(citation)}
-                          className="text-white/70 hover:text-white hover:bg-white/10"
+                          className="text-muted-foreground hover:text-foreground hover:bg-accent"
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -220,13 +220,13 @@ export default function CitationPanel() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDownload(citation)}
-                          className="text-white/70 hover:text-white hover:bg-white/10"
+                          className="text-muted-foreground hover:text-foreground hover:bg-accent"
                         >
                           <Download className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-                    <p className="text-white text-sm leading-relaxed">{citation}</p>
+                    <p className="text-foreground text-sm leading-relaxed">{citation}</p>
                   </div>
                 ))}
               </div>

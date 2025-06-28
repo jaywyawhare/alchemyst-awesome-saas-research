@@ -31,7 +31,7 @@ const commands = [
   { id: "collaboration", name: "Collaboration Hub", icon: Users, shortcut: "⌘4", category: "Agents" },
   { id: "data", name: "Data Extraction", icon: Database, shortcut: "⌘5", category: "Agents" },
   { id: "proposal", name: "Research Proposals", icon: Lightbulb, shortcut: "⌘6", category: "Agents" },
-  { id: "settings", name: "Settings", icon: Settings, shortcut: "⌘,", category: "System" },
+  { id: "settings", name: "Settings", icon: Settings, shortcut: "⌘7", category: "System" },
   { id: "help", name: "Help & Documentation", icon: HelpCircle, shortcut: "⌘?", category: "System" },
 ];
 
@@ -82,10 +82,11 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }: CommandP
   }, [isOpen, selectedIndex, filteredCommands, onClose]);
 
   const handleCommandSelect = (command: typeof commands[0]) => {
-    if (command.id === "settings" || command.id === "help") {
-      // Handle system commands
+    if (command.id === "help") {
+      // Handle help command
       console.log(`Opening ${command.name}`);
     } else {
+      // Navigate to the selected tab/command
       onNavigate(command.id);
     }
     onClose();
@@ -96,21 +97,21 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }: CommandP
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="command-palette max-w-2xl p-0 border-0">
         <DialogTitle className="sr-only">Command Palette</DialogTitle>
-        <div className="p-4 border-b border-white/10">
+        <div className="p-4 border-b border-border">
           <div className="flex items-center space-x-3">
-            <Command className="h-5 w-5 text-white/70" />
+            <Command className="h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Search commands, agents, or actions..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 glass focus-ring"
+              className="flex-1 focus-ring"
               autoFocus
             />
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="text-white/70 hover:text-white"
+              className="text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -119,7 +120,7 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }: CommandP
 
         <div className="max-h-96 overflow-y-auto custom-scrollbar">
           {filteredCommands.length === 0 ? (
-            <div className="p-8 text-center text-white/50">
+            <div className="p-8 text-center text-muted-foreground">
               <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
               <p>No commands found</p>
             </div>
@@ -131,22 +132,22 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }: CommandP
                   variant="ghost"
                   className={`w-full justify-start p-3 h-auto ${
                     index === selectedIndex 
-                      ? 'bg-white/10 text-white' 
-                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                      ? 'bg-accent text-accent-foreground' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
                   onClick={() => handleCommandSelect(command)}
                 >
                   <command.icon className="h-4 w-4 mr-3" />
                   <div className="flex-1 text-left">
                     <div className="font-medium">{command.name}</div>
-                    <div className="text-xs text-white/50">{command.category}</div>
+                    <div className="text-xs text-muted-foreground">{command.category}</div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="shortcut-key">
+                    <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
                       {command.shortcut}
                     </span>
                     {index === selectedIndex && (
-                      <ArrowUp className="h-3 w-3 text-white/50" />
+                      <ArrowUp className="h-3 w-3 text-muted-foreground" />
                     )}
                   </div>
                 </Button>
@@ -155,7 +156,7 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }: CommandP
           )}
         </div>
 
-        <div className="p-4 border-t border-white/10 text-xs text-white/40">
+        <div className="p-4 border-t border-border text-xs text-muted-foreground">
           <div className="flex items-center justify-between">
             <span>Use ↑↓ to navigate, Enter to select, Esc to close</span>
             <span>{filteredCommands.length} commands</span>
