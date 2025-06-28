@@ -20,6 +20,9 @@ import {
   Shield,
   Cpu
 } from "lucide-react";
+import Link from "next/link";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import AuthPage from "./auth/page";
 
 const features = [
   {
@@ -67,8 +70,9 @@ const stats = [
   { value: "24/7", label: "AI Support" }
 ];
 
-export default function LandingPage() {
+export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [authOpen, setAuthOpen] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -164,16 +168,22 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              {/* Aceternity-style Primary Button */}
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-violet-500/25 transition-all duration-300 group"
-              >
-                <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
-                Get Started
-                <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              
+              {/* Auth Modal Trigger */}
+              <Dialog open={authOpen} onOpenChange={setAuthOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-violet-500/25 transition-all duration-300 group"
+                  >
+                    <Play className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
+                    Get Started
+                    <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md p-0 bg-transparent border-none shadow-none" showCloseButton>
+                  <AuthPage />
+                </DialogContent>
+              </Dialog>
               {/* Aceternity-style Secondary Button */}
               <Button 
                 variant="outline" 
@@ -212,7 +222,7 @@ export default function LandingPage() {
                 </motion.div>
               ))}
             </motion.div>
-          </div>
+        </div>
         </section>
 
         {/* Features Section - Aceternity Style */}
@@ -281,13 +291,20 @@ export default function LandingPage() {
               <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto">
                 Join thousands of researchers who are already using AI to accelerate their discoveries.
               </p>
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-violet-500/25 transition-all duration-300"
-              >
-                Start Your Free Trial
-                <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
+              <Dialog open={authOpen} onOpenChange={setAuthOpen}>
+                <DialogTrigger asChild>
+                  <Button 
+                    size="lg" 
+                    className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white px-10 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-violet-500/25 transition-all duration-300"
+                  >
+                    Start Your Free Trial
+                    <ArrowRight className="h-5 w-5 ml-2" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md p-0 bg-transparent border-none shadow-none" showCloseButton>
+                  <AuthPage />
+                </DialogContent>
+              </Dialog>
             </motion.div>
           </div>
         </section>
